@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, redirect
+from flask import Flask, render_template, render_template_string, make_response, redirect
 from flask.ext.restful import Api, Resource, reqparse, abort
 
 import json
@@ -172,6 +172,43 @@ class HelpRequestListAsJSON(Resource):
         return data
 
 
+#####################################################################
+name_parser = reqparse.RequestParser()
+name_parser.add_argument('name', type=str, default='Preston')
+
+class Greeting(Resource):
+    def get(self, role):
+        args = name_parser.parse_args()
+        res = make_response(
+          render_template(
+            'greeting.html',
+            role = role,
+            name=args['name']
+          )
+        )
+        res.headers['Content-Type']='text/html'
+        return res
+
+class Greetings(Resource):
+  roles = set()
+  parser = reqparse.RequestParser()
+
+  def get(self):
+    res = make_response(render_template('greetings.html', roles=self.roles))
+    res.headers['Content-Type']='text/html'
+    return res
+
+  def post(self):
+    self.parser.add_argument('role', type=str, default='Student')
+    args = self.parser.parse_args()
+    self.roles.add(args['role'])
+    print(self.roles)
+    return self.get()
+
+
+
+#####################################################################
+
 # Assign URL paths to our resources.
 app = Flask(__name__)
 api = Api(app)
@@ -179,7 +216,9 @@ api.add_resource(HelpRequestList, '/requests')
 api.add_resource(HelpRequestListAsJSON, '/requests.json')
 api.add_resource(HelpRequest, '/request/<string:helprequest_id>')
 api.add_resource(HelpRequestAsJSON, '/request/<string:helprequest_id>.json')
-
+#greeting
+api.add_resource(Greeting, '/greeting/<string:role>')
+api.add_resource(Greetings, '/greetings')
 
 # Redirect from the index to the list of help requests.
 @app.route('/')
