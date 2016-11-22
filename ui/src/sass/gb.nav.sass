@@ -1,0 +1,20 @@
+.gb-nav
+  background-color: $font__color-acc
+  color: #fff
+  padding: 0 .5rem
+  width: 100%
+  .brand
+    font-size: 18px
+    float: left
+    padding: 11px
+  &-menu
+    float: right
+    &--item
+      color: #fff
+      padding: .75rem .5rem
+      &:hover
+        background-color: darken($font__color-acc, 15%)
+        color: #fff
+        transition: background-color 200ms
+      &.active
+        color: darken(#fff, 15%)

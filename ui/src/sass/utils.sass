@@ -1,0 +1,59 @@
+*
+  box-sizing: border-box
+
+body
+  color: rgba(0, 0, 0, .87)
+  font: 300 16px Roboto, sans-serif
+  margin: 0
+  padding: 0
+
+h1, h2, h3
+  font-weight: 500
+  margin: .5rem 0
+
+h1
+  font-size: 2rem
+
+main
+  display: block
+  padding: 8px 0
+
+hr
+  border: 0.5px solid $bd__color-light
+  margin: 1.3em 0
+
+a
+  color: $font__color-acc
+  display: inline-block
+  text-decoration: none
+  transition: color 200ms
+  &:hover, &:focus
+    color: darken($font__color-acc, 15%)
+
+input, textarea, select
+  width: 100%
+
+.clearfix
+  &:after, &:before
+    display: table
+    content: " "
+    clear: both
+
+.container
+  margin: 0 auto
+  max-width: 90%
+  @extend .clearfix
+
+.bd-top
+  border-top: 1px solid $bd__color-light
+
+.rem1-3
+  font-size: 1.3rem
+
+.generic
+  padding: 16px
+
+.cl-brand
+  background-color: $font__color-acc
+  &--text
+    color: $font__color-acc

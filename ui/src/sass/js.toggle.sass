@@ -1,0 +1,85 @@
+.js
+  &-toggle
+    cursor: pointer
+    position: relative
+    display: block
+    padding: .5rem 1rem
+    -webkit-user-select: none
+    &:before
+      content: ""
+      position: absolute
+      left: 0
+      width: 2px
+      height: 50%
+      background-color: hsl(0,0%,88%)
+      transition: transform .2s cubic-bezier(.4,.1,0,1)
+      top: 0
+      transform-origin: bottom center
+      transform: translateX(.7em) rotate(-30deg) scale(.75)
+    &:after
+      content: ""
+      position: absolute
+      left: 0
+      width: 2px
+      height: 50%
+      background-color: hsl(0,0%,88%)
+      transition: transform .2s cubic-bezier(.4,.1,0,1)
+      bottom: 0
+      transform-origin: top center
+      transform: translateX(.7em) rotate(30deg) scale(.75)
+    &-box
+      padding: .25rem 2rem
+      display: none
+    &-text
+      color: $font__color-light
+
+.is-open
+  .js-
+    &toggle-box
+      display: block
+      animation: js-toggle-box .2s cubic-bezier(0, .20, .20, .96)
+    &toggle
+      &:before
+        transform: rotate(0deg)
+        -ms-transform: rotate(0deg)
+        -webkit-transform: rotate(0deg)
+      &::after
+        transform: rotate(0deg)
+        -ms-transform: rotate(0deg)
+        -webkit-transform: rotate(0deg)
+
+@keyframes "js-toggle-box"
+  0%
+    opacity: 0
+    transform: translateY(-20px)
+    -ms-transform: translateY(-20px)
+    -webkit-transform: translateY(-20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+    -ms-transform: translateY(0)
+    -webkit-transform: translateY(0)
+
+@-webkit-keyframes "js-toggle-box"
+  0%
+    opacity: 0
+    transform: translateY(-20px)
+    -ms-transform: translateY(-20px)
+    -webkit-transform: translateY(-20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+    -ms-transform: translateY(0)
+    -webkit-transform: translateY(0)
+
+@-moz-keyframes "js-toggle-box"
+  0%
+    opacity: 0
+    transform: translateY(-20px)
+    -ms-transform: translateY(-20px)
+    -webkit-transform: translateY(-20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
+    -ms-transform: translateY(0)
+    -webkit-transform: translateY(0)
