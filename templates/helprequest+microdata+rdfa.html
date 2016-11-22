@@ -1,7 +1,7 @@
-<!doctype html>
-<link rel="alternate" type="application/json" href="{{ request.path }}.json">
-<title>{{ helprequest.title }}</title>
+{% extends "index.html"%}
 
+
+{% block body %}
 <body itemscope itemtype="http://schema.org/CreativeWork/HelpRequest"
                 vocab="http://schema.org/"
                 prefix="helpdesk:https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#"
@@ -72,3 +72,4 @@ view data as JSON-LD</a>
 
 <a rel="collection" href="{{ url_for('helprequestlist') }}">all help requests</a>
 </body>
+{% endblock %}
