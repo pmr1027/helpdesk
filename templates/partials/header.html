@@ -1,3 +1,10 @@
-<header>
-    <div>Hello</div>
+<header class="gb-nav">
+  <div class="container">
+  <div class="brand">{{ appconfig.brand }}</div>
+  <nav class="gb-nav-menu">
+    {% for item in appconfig.global.nav %}
+      <a class="gb-nav-menu--item {% if item.ref == activeitem %}active{% endif %}" href="{{item.href}}" rel="{{item.rel}}">{{item.title}}</a>
+    {% endfor %}
+  </nav>
+  </div>
 </header>
