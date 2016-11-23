@@ -1,0 +1,28 @@
+{"brand": "CH Visitors Bureau",
+    "global": {
+        "nav": [
+            {
+                "title": "Businesses",
+                "href": "/businesses",
+                "rel": "collection",
+                "ref": "business"
+            },
+            {
+                "title": "Events",
+                "href": "/events",
+                "rel": "collection",
+                "ref": "event"
+            }
+        ]
+    },
+    "categories": {
+      "business": ["Animal Shelter", "Automotive Business", "Child Care", "Dentist", "Dry Cleaning Or Laundry", "Emergency Service", "Employment Agency", "Entertainment Business", "Financial Service", "Food Establishment", "Government Office", "Health And Beauty Business", "Home And Construction Business", "Internet Cafe", "Legal Service", "Library", "Local Business", "Lodging Business", "Professional Service", "Radio Station", "Real Estate Agent", "Recycling Center", "Restaurant", "Self Storage", "Shopping Center", "Sports Activity Location", "Store", "Television Station", "Tourist Information Center", "Travel Agency"],
+      "event":[]
+    },
+    "addresses": {
+      "cities": {
+        "Chapel Hill":["27514","27515","27516","27517","27599"]
+      },
+      "states": ["NC"]
+    }
+}
