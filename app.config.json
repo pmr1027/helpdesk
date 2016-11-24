@@ -17,12 +17,25 @@
     },
     "categories": {
       "business": ["Animal Shelter", "Automotive Business", "Child Care", "Dentist", "Dry Cleaning Or Laundry", "Emergency Service", "Employment Agency", "Entertainment Business", "Financial Service", "Food Establishment", "Government Office", "Health And Beauty Business", "Home And Construction Business", "Internet Cafe", "Legal Service", "Library", "Local Business", "Lodging Business", "Professional Service", "Radio Station", "Real Estate Agent", "Recycling Center", "Restaurant", "Self Storage", "Shopping Center", "Sports Activity Location", "Store", "Television Station", "Tourist Information Center", "Travel Agency"],
-      "event":[]
+      "event":["Business Event", "Childrens Event", "Comedy Event", "Dance Event", "Delivery Event", "Education Event", "Exhibition Event", "Festival", "Food Event", "Literary Event", "Music Event", "Publication Event", "Sale Event", "Screening Event", "Social Event", "Sports Event", "Theater Event", "Visual Arts Event"]
     },
     "addresses": {
       "cities": {
         "Chapel Hill":["27514","27515","27516","27517","27599"]
       },
       "states": ["NC"]
+    },
+    "attr": {
+      "businesses": {
+        "name": 1,
+        "openingHours": 1,
+        "address.addressRegion": 1,
+        "address.addressLocality": 1,
+        "address.streetAddress": 1,
+        "address.postalCode": 1,
+        "description": 1,
+        "cat": 1,
+        "@id": 0
+      }
     }
 }

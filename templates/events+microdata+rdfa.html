@@ -1,14 +1,14 @@
 {% extends "index.html"%}
 
-{% block sitetitle %}All Businesses{% endblock %}
+{% block sitetitle %}All Events{% endblock %}
 
 {% block body %}
-<ul class="bss-ls">
+<ul class="evs-ls">
   {% for request_id, req_entity in entity %}
-  <li class="bs item"
+  <li class="ev item"
       itemscope
-      itemid="{{ url_for('business', request_id=request_id, _external=True) }}"
-      resource="{{ url_for('business', request_id=request_id, _external=True) }}"
+      itemid="{{ url_for('event', request_id=request_id, _external=True) }}"
+      resource="{{ url_for('event', request_id=request_id, _external=True) }}"
       vocab="http://schema.org/"
       typeof="{{req_entity['@type']}}">
     <header>
@@ -28,7 +28,7 @@
     </div>
     <div class="desc" itemprop="description" property="description">{{req_entity['description']}}</div>
     <div class="view">
-      <a rel="details" class="url" itemprop="url" property="url" href="{{ url_for('business', request_id=request_id) }}">View Details</a>
+      <a rel="details" class="url" itemprop="url" property="url" href="{{ url_for('event', request_id=request_id) }}">View Details</a>
     </div>
   </li>
   {% endfor %}
@@ -41,20 +41,36 @@
 <div class="js-toggle-content">
 <div class="js-toggle">
   <div class="js-toggle-text rem1-3" onclick="this.parentNode.parentNode.classList.toggle('is-open')">
-    Add New Business
+    Add New Event
   </div>
 </div>
 <div class="js-toggle-box">
-<div class="bss-update">
-  <h3>Business Details</h3>
-  <form name="bs-add"  class="business-editor" action="{{ url_for('businesslist') }}" method="post">
+<div class="evs-update">
+  <h3>Event Details</h3>
+  <form name="ev-add"  class="event-editor" action="{{ url_for('eventlist') }}" method="post">
     <label>Name
       <input class="name" type="text" name="name"/>
     </label>
-    <label>Hours of Operation
-      <input class="time" type="text" name="openingHours" />
-      <!-- allow addition of multiple times -->
+    <fieldset>
+    <legend>When does it begin?</legend>
+    <label>Date
+      <input class="time" type="text" name="startdate.date"/>
     </label>
+    <label>Time
+      <input class="time" type="text" name="startdate.time"/>
+    </label>
+    </fieldset>
+    <fieldset>
+    <legend>When does it end?</legend>
+    <label>Date
+      <input class="time" type="text" name="enddate.date"/>
+    </label>
+    <label>Time
+      <input class="time" type="text" name="enddate.time"/>
+    </label>
+    </fieldset>
+    <fieldset>
+    <legend>Where is it?</legend>
     <label>Street Address
       <input class="address" type="text" name="streetAddress" />
     </label>
@@ -79,6 +95,7 @@
         {% endfor %}
       </select>
     </label>
+  </fieldset>
     <label>Type
       <select class="cat" name="cat">
         {% for idx in range(categories.len) %}
@@ -96,7 +113,7 @@
     <label>Description
       <textarea class="desc" name="description" rows="8" cols="40"></textarea>
     </label>
-    <input class="add" type="submit" value="Add Business">
+    <input class="add" type="submit" value="Add Event">
   </form>
 </div>
 </div>

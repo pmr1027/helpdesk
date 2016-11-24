@@ -1,13 +1,23 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="alternate" type="application/json" href="{{ request.path }}.json">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/master.min.css') }}">
-    <title>{{ entity.title }}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="alternate" type="application/json" href="{{ request.path }}.json">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/master.min.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <style>
+  main{padding-bottom: 2rem}
+  </style>
+  <title>{% block sitetitle %}{% endblock %}</title>
 </head>
 <body>
     {% include "partials/header.html" %}
+  <main>
     <div class="container">
     {% block body %}{% endblock %}
     </div>
+  </main>
 </body>

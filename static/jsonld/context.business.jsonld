@@ -1,0 +1,14 @@
+{"@context": {
+    "name": "http://schema.org/name",
+    "description": "http://schema.org/description",
+    "address": "http://schema.org/address"
+  },
+  "name": "McDonalds",
+  "description": "Big Yellow Arches",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Mexico Beach",
+    "addressRegion": "FL",
+    "streetAddress": "3102 Highway 98"
+  }
+}
