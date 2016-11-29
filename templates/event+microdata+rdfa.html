@@ -37,7 +37,7 @@
       resource="{{ url_for('business', request_id=id, _external=True) }}"
       vocab="http://schema.org/"
       typeof="{{relations.rels[id]['@type']}}">
-        <span class="name">{{ relations.rels[id].name }}</span>
+        <span class="name" itemprop="name" property="name">{{ relations.rels[id].name }}</span>
         <a class="url" href="{{url_for('business',request_id=id)}}">View</a>
       </li>
       {% endfor %}
