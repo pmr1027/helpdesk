@@ -38,7 +38,7 @@
       vocab="http://schema.org/"
       typeof="{{relations.rels[id]['@type']}}">
         <span class="name" itemprop="name" property="name">{{ relations.rels[id].name }}</span>
-        <a class="url" href="{{url_for('business',request_id=id)}}">View</a>
+        <a class="url" itemprop="url" property="url" href="{{url_for('business',request_id=id)}}">View</a>
       </li>
       {% endfor %}
       </ul>
