@@ -35,6 +35,19 @@
         "address.postalCode": 1,
         "description": 1,
         "cat": 1,
+        "relations": 1,
+        "@id": 0
+      },
+      "events": {
+        "name": 1,
+        "address.addressRegion": 1,
+        "address.addressLocality": 1,
+        "address.streetAddress": 1,
+        "address.postalCode": 1,
+        "startDate.date": 1,
+        "description": 1,
+        "cat": 1,
+        "relations": 1,
         "@id": 0
       }
     }

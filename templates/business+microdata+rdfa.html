@@ -26,6 +26,12 @@
       </span>
     </div>
     <div class="desc" itemprop="description" property="description">{{entity['description']}}</div>
+    {% if relations.selected %}
+    <div>Related Events</div>
+    {% for id in relations.selected %}
+    <a class="url" href="{{url_for('event',request_id=id)}}">{{ relations.rels[id].name }}</a><br>
+    {% endfor %}
+    {% endif %}
     <div class="view">
       <a href="{{ request.path }}.json">View as JSON-LD</a><br>
       <a rel="collection" class="url" itemprop="url" property="url" href="{{ url_for('businesslist')}}">View All</a>
@@ -82,9 +88,9 @@
       </select>
     </label>
     <label>Related To
-      <select class="relations" name="relations">
-        {% for idx in range(relations.len) %}
-        <option value="{{ idx }}">{{ relations.list[idx] }}</option>
+      <select class="relations" name="relations" multiple>
+        {% for id in relations.rels %}
+        <option value="{{ id }}" {% if id in relations.selected %}selected{% endif %}>{{ relations.rels[id].name }}</option>
         {% endfor %}
       </select>
     </label>

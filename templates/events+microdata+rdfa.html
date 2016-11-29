@@ -54,19 +54,19 @@
     <fieldset>
     <legend>When does it begin?</legend>
     <label>Date
-      <input class="time" type="text" name="startdate.date"/>
+      <input class="time" type="date" name="startdate.date"/>
     </label>
     <label>Time
-      <input class="time" type="text" name="startdate.time"/>
+      <input class="time" type="time" name="startdate.time"/>
     </label>
     </fieldset>
     <fieldset>
     <legend>When does it end?</legend>
     <label>Date
-      <input class="time" type="text" name="enddate.date"/>
+      <input class="time" type="date" name="enddate.date"/>
     </label>
     <label>Time
-      <input class="time" type="text" name="enddate.time"/>
+      <input class="time" type="time" name="enddate.time"/>
     </label>
     </fieldset>
     <fieldset>
@@ -104,9 +104,9 @@
       </select>
     </label>
     <label>Related To
-      <select class="relations" name="relations">
-        {% for idx in range(relations.len) %}
-        <option value="{{ idx }}">{{ relations.list[idx] }}</option>
+      <select class="relations" name="relations" multiple>
+        {% for id in relations %}
+        <option value="{{ id }}">{{ relations[id].name }}</option>
         {% endfor %}
       </select>
     </label>

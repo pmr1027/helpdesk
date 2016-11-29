@@ -51,6 +51,54 @@ def nonempty_string(x):
         raise ValueError('string is empty')
     return s
 
+
+# Sideeffects
+# @rel1 array of relations
+# @rel1id string id
+# @reltype string
+# @return None
+#def rectify_relation_difs(rel1,rel1id,reltype,operation):
+
+# pass in a list of differences and a type
+# ensure that all the current ids are with their respective relation
+
+def is_id_in_list(_id, _list):
+    return _id in set(_list)
+
+def is_id_in_set(_id, _set):
+    return _id in _set
+
+def rectify(thisid, old, new, entitytype):
+    new_set = set(new)
+    sym_difs = list(set(old).symmetric_difference(new_set))
+    for dif in sym_difs:
+        item = data[entitytype][dif]
+        print(item)
+        if item:
+            if item['relations'] == None:
+                item['relations'] = []
+            if dif in new_set:
+                if len(item['relations'])==0:
+                    item['relations'].append(thisid)
+                    continue
+                n_set = set(item['relations'])
+                n_set.add(thisid)
+                item['relations'] = list(n_set)
+            else:
+                print(dif,item['relations'])
+                n_set = set(item['relations'])
+                n_set.discard(thisid)
+                if n_set == None:
+                    n_set = []
+                else:
+                    n_set = list(n_set)
+                item['relations'] = n_set
+
+
+
+
+
+
 # Specify the parameters for filtering and sorting help requests.
 # See `filter_and_sort_helprequests` above.
 query_parser = reqparse.RequestParser()
@@ -98,6 +146,10 @@ def parserUpdateArgs(parser, elements, expected):
 # Given the data for a request, generate an HTML representation
 # of that help request.
 def render_request_as_html(entity, types, html):
+    if types == TYPES[0]:
+        rel = data['events']
+    else:
+        rel = data['businesses']
     return render_template(
         html+'+microdata+rdfa.html',
         entity=entity,
@@ -110,10 +162,11 @@ def render_request_as_html(entity, types, html):
           'len': len(app_config['categories'][types]),
           'list': app_config['categories'][types]
         },
-        relations={
-          'len': len(app_config['categories'][types]),
-          'list': app_config['categories'][types]
+        relations= {
+        'rels': rel,
+        'selected': set(entity['relations'])
         },
+        #{x:rel[x]['name']} for x in entity['relations']],
         jsonld=json.dumps(entity)
         )
 
@@ -121,6 +174,10 @@ def render_request_as_html(entity, types, html):
 # Given the data for a list of requests, generate an HTML representation
 # of that list.
 def render_list_as_html(lists, types, html):
+    if types == TYPES[0]:
+        rel = data['events']
+    else:
+        rel = data['businesses']
     jsonldbuild = {"@context":{}}
     jsonldbuild['@context'].setdefault(html, data['@context'][html])
     jsonldbuild.setdefault(html, data[html])
@@ -136,10 +193,7 @@ def render_list_as_html(lists, types, html):
           'len': len(app_config['categories'][types]),
           'list': app_config['categories'][types]
         },
-        relations={
-          'len': len(app_config['categories'][types]),
-          'list': app_config['categories'][types]
-        },
+        relations=rel,
         jsonld=json.dumps(jsonldbuild)
         )
 
@@ -192,6 +246,7 @@ class Business(Resource):
     ['name','openingHours','address.addressRegion','address.addressLocality',
     'address.streetAddress','address.postalCode','description','cat','changed'],
     [str,str,str,str,str,str,str,str,str])
+    business_parser.add_argument('relations', type=str, action='append')
 
     # If a help request with the specified ID does not exist,
     # respond with a 404, otherwise respond with an HTML representation.
@@ -207,24 +262,24 @@ class Business(Resource):
     def patch(self, request_id,):
         error_if_not_found(request_id,data['businesses'])
         request = data['businesses'][request_id]
-
         update = self.business_parser.parse_args()
         for key in update['changed'].split(','):
-            if not is_updateable_attr('businesses', key):
-                continue
-            request_deeper = request
-            traverse = key.split('.')
-            t = key
-            for k in traverse:
-                if k == traverse[-1]:
-                    t = k
-                    break
-                request_deeper = request_deeper[k]
-            if key == 'cat':
-                request_deeper[t]['@value'] = int(update[key])
-                request['@type'] = app_config['categories'][TYPES[0]][request_deeper[t]['@value']].replace(" ", "")
-                continue
-            request_deeper[t] = update[key]
+            if is_updateable_attr('businesses', key):
+                request_deeper = request
+                traverse = key.split('.')
+                t = key
+                for k in traverse:
+                    if k == traverse[-1]:
+                        t = k
+                        break
+                    request_deeper = request_deeper[k]
+                if key == 'cat':
+                    request_deeper[t]['@value'] = int(update[key])
+                    request['@type'] = app_config['categories'][TYPES[0]][request_deeper[t]['@value']].replace(" ", "")
+                    continue
+                elif key == 'relations':
+                    rectify(request_id, request_deeper[t], update[key], 'events')
+                request_deeper[t] = update[key]
 
         file_write(DATASE_FILE, data)
         return make_response(
@@ -267,9 +322,14 @@ class EventList(Resource):
     # Add a new help request to the list, and respond with an HTML
     # representation of the updated list.
     def post(self):
+        new_event_parser.add_argument('relations', type=str, action='append')
         reqargs = new_event_parser.parse_args()
+
+        if reqargs['relations'] == None:
+            reqargs['relations'] = []
         entity = {}
         request_id = generate_id()
+        # I know they don't have to be listed out this way, but hey
         entity['@context'] = "http://schema.org"
         entity['description'] = reqargs['description']
         entity['name'] = reqargs['name']
@@ -289,6 +349,7 @@ class EventList(Resource):
            "postalCode": reqargs['postalCode'],
            "streetAddress": reqargs['streetAddress']
         }
+        entity['relations'] = reqargs['relations']
         data['events'][request_id] = entity
 
         file_write(DATASE_FILE, data)
@@ -301,8 +362,10 @@ class Event(Resource):
     event_parser = reqparse.RequestParser();
     parserUpdateArgs(event_parser,
     ['name','time','address.addressRegion','address.addressLocality',
-    'address.streetAddress','address.postalCode','description','cat','changed'],
-    [str,str,str,str,str,str,str,str,str])
+    'address.streetAddress','address.postalCode','description','cat','changed',
+    'startDate.date','startDate.time','endDate.date','endDate.time'],
+    [str,str,str,str,str,str,str,str,str,str,str,str,str])
+    event_parser.add_argument('relations', type=str, action='append')
 
     # If a help request with the specified ID does not exist,
     # respond with a 404, otherwise respond with an HTML representation.
@@ -316,14 +379,36 @@ class Event(Resource):
     # respond with a 404, otherwise update the help request and respond
     # with the updated HTML representation.
     def patch(self, request_id):
-        error_if_not_found(request_id,data['businesses'])
-        helprequest = data['helprequests'][request_id]
-        update = update_helprequest_parser.parse_args()
-        helprequest['priority'] = update['priority']
-        if len(update['comment'].strip()) > 0:
-            helprequest.setdefault('comments', []).append(update['comment'])
+        error_if_not_found(request_id,data['events'])
+        request = data['events'][request_id]
+        update = self.event_parser.parse_args()
+        for key in update['changed'].split(','):
+            if is_updateable_attr('events', key):
+                request_deeper = request
+                traverse = key.split('.')
+                t = key
+                if 'startDate' in key or 'endDate' in key:
+                    # not the most efficient way, but it seems to work
+                    request[traverse[0]] = dparser.parse(update[traverse[0]+'.date']
+                    +' '+update[traverse[0]+'.time']).isoformat()
+                    continue
+                for k in traverse:
+                    if k == traverse[-1]:
+                        t = k
+                        break
+                    request_deeper = request_deeper[k]
+                if key == 'cat':
+                    request_deeper[t]['@value'] = int(update[key])
+                    request['@type'] = app_config['categories'][TYPES[0]][request_deeper[t]['@value']].replace(" ", "")
+                    continue
+                elif key == 'relations':
+                    rectify(request_id, request_deeper[t], update[key], 'businesses')
+                request_deeper[t] = update[key]
+
+        file_write(DATASE_FILE, data)
         return make_response(
-            render_helprequest_as_html(helprequest), 200)
+            render_request_as_html(request, TYPES[1],'event'), 200)
+
 
 # Define a resource for getting a JSON representation of a EventList.
 class EventListAsJSON(Resource):
@@ -381,6 +466,16 @@ def after_request(response):
 def format_datetime(value):
     return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%B %d, %Y at %I:%M%p')
 app.jinja_env.filters['datetime'] = format_datetime
+
+@app.template_filter('getDate')
+def format_getDate(value):
+    return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
+app.jinja_env.filters['getDate'] = format_getDate
+
+@app.template_filter('getTime')
+def format_getTime(value):
+    return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%H:%M')
+app.jinja_env.filters['getTime'] = format_getTime
 
 # Start the server.
 if __name__ == '__main__':

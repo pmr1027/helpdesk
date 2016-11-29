@@ -26,6 +26,12 @@
       </span>
     </div>
     <div class="desc" itemprop="description" property="description">{{entity['description']}}</div>
+    {% if relations.selected %}
+    <div>Related Businesses</div>
+    {% for id in relations.selected %}
+    <a class="url" href="{{url_for('business',request_id=id)}}">{{ relations.rels[id].name }}</a><br>
+    {% endfor %}
+    {% endif %}
     <div class="view">
       <a href="{{ request.path }}.json">View as JSON-LD</a><br>
       <a rel="collection" class="url" itemprop="url" property="url" href="{{ url_for('eventlist')}}">View All</a>
@@ -46,10 +52,26 @@
     <label>Name
       <input class="name" type="text" name="name" value="{{entity.name}}"/>
     </label>
-    <label>Hours of Operation
-      <input class="time" type="text" name="openingHours" value="{{entity.openingHours}}"/>
-      <!-- allow addition of multiple times -->
+    <fieldset>
+    <legend>When does it begin?</legend>
+    <label>Date
+      <input class="time" type="date" name="startDate.date" value="{{entity.startDate|getDate}}"/>
     </label>
+    <label>Time
+      <input class="time" type="time" name="startDate.time" value="{{entity.endDate|getTime}}"/>
+    </label>
+    </fieldset>
+    <fieldset>
+    <legend>When does it end?</legend>
+    <label>Date
+      <input class="time" type="date" name="endDate.date" value="{{entity.endDate|getDate}}"/>
+    </label>
+    <label>Time
+      <input class="time" type="time" name="endDate.time" value="{{entity.endDate|getTime}}"/>
+    </label>
+    </fieldset>
+    <fieldset>
+    <legend>Where is it?</legend>
     <label>Street Address
       <input class="address" type="text" name="address.streetAddress" value="{{entity.address.streetAddress}}"/>
     </label>
@@ -74,6 +96,7 @@
         {% endfor %}
       </select>
     </label>
+  </fieldset>
     <label>Type
       <select class="cat" name="cat">
         {% for idx in range(categories.len) %}
@@ -82,9 +105,9 @@
       </select>
     </label>
     <label>Related To
-      <select class="relations" name="relations">
-        {% for idx in range(relations.len) %}
-        <option value="{{ idx }}">{{ relations.list[idx] }}</option>
+      <select class="relations" name="relations" multiple>
+        {% for id in relations.rels %}
+        <option value="{{ id }}" {% if id in relations.selected %}selected{% endif %}>{{ relations.rels[id].name }}</option>
         {% endfor %}
       </select>
     </label>
