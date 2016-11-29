@@ -27,11 +27,23 @@
     </div>
     <div class="desc" itemprop="description" property="description">{{entity['description']}}</div>
     {% if relations.selected %}
-    <div>Related Businesses</div>
-    {% for id in relations.selected %}
-    <a class="url" href="{{url_for('business',request_id=id)}}">{{ relations.rels[id].name }}</a><br>
-    {% endfor %}
-    {% endif %}
+    <div class="relations" style="padding: 16px 0;">
+      <header style="color: rgba(0,0,0,0.54);font-size: 1.1rem;">Related Businesses</header>
+      <ul class="bss-ls">
+      {% for id in relations.selected %}
+      <li class="bs item"
+      itemscope
+      itemid="{{ url_for('business', request_id=id, _external=True) }}"
+      resource="{{ url_for('business', request_id=id, _external=True) }}"
+      vocab="http://schema.org/"
+      typeof="{{relations.rels[id]['@type']}}">
+        <span class="name">{{ relations.rels[id].name }}</span>
+        <a class="url" href="{{url_for('business',request_id=id)}}">View</a>
+      </li>
+      {% endfor %}
+      </ul>
+    </div>
+      {% endif %}
     <div class="view">
       <a href="{{ request.path }}.json">View as JSON-LD</a><br>
       <a rel="collection" class="url" itemprop="url" property="url" href="{{ url_for('eventlist')}}">View All</a>
