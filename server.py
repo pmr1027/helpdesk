@@ -199,6 +199,7 @@ def render_list_as_html(lists, types, html):
 
 new_business_parser = reqparse.RequestParser()
 parserArgs(new_business_parser, ['name','cat','description','streetAddress','postalCode','state','city','openingHours'])
+new_business_parser.add_argument('relations', type=str, action='append')
 class BusinessList(Resource):
     # Respond with an HTML representation of the help request list, after
     # applying any filtering and sorting parameters.
@@ -232,6 +233,8 @@ class BusinessList(Resource):
            "postalCode": reqargs['postalCode'],
            "streetAddress": reqargs['streetAddress']
         }
+        entity['relations'] = reqargs['relations']
+        rectify(request_id, [], reqargs['relations'], 'events')
         data['businesses'][request_id] = entity
 
         file_write(DATASE_FILE, data)
@@ -259,7 +262,7 @@ class Business(Resource):
     # If a help request with the specified ID does not exist,
     # respond with a 404, otherwise update the help request and respond
     # with the updated HTML representation.
-    def patch(self, request_id,):
+    def patch(self, request_id):
         error_if_not_found(request_id,data['businesses'])
         request = data['businesses'][request_id]
         update = self.business_parser.parse_args()
@@ -350,6 +353,7 @@ class EventList(Resource):
            "streetAddress": reqargs['streetAddress']
         }
         entity['relations'] = reqargs['relations']
+        rectify(request_id, [], reqargs['relations'], 'businesses')
         data['events'][request_id] = entity
 
         file_write(DATASE_FILE, data)
