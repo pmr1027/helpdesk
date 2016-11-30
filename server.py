@@ -69,11 +69,12 @@ def is_id_in_set(_id, _set):
     return _id in _set
 
 def rectify(thisid, old, new, entitytype):
+    new = [] if new == None else new
+    old = [] if old == None else old
     new_set = set(new)
     sym_difs = list(set(old).symmetric_difference(new_set))
     for dif in sym_difs:
         item = data[entitytype][dif]
-        print(item)
         if item:
             if item['relations'] == None:
                 item['relations'] = []
@@ -93,8 +94,6 @@ def rectify(thisid, old, new, entitytype):
                 else:
                     n_set = list(n_set)
                 item['relations'] = n_set
-
-
 
 
 
