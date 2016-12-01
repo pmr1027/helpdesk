@@ -1,7 +1,7 @@
 from server import app
 import unittest
 
-class FlaskrTestCase(unittest.TestCase):
+class Test(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
