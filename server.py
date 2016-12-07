@@ -201,7 +201,7 @@ class BusinessList(Resource):
         query = query_parser.parse_args()
         return make_response(
             render_list_as_html(
-                filter_and_sort(**query,types='businesses'), TYPES[0], 'businesses'), 200)
+                filter_and_sort(**query, types='businesses'), TYPES[0], 'businesses'), 200)
 
     # Add a new help request to the list, and respond with an HTML
     # representation of the updated list.
