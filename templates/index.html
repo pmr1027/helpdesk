@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="alternate" type="application/json" href="{{ request.path }}.json">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/master.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plugin.modal.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <style>
   main{padding-bottom: 2rem}
@@ -16,8 +17,34 @@
 <body>
     {% include "partials/header.html" %}
   <main>
-    <div class="container">
+    <div id="maincontainer" class="container">
     {% block body %}{% endblock %}
     </div>
   </main>
+  <script src="{{ url_for('static', filename='js/plugin.modal.js') }}"></script>
+  <script>
+    var modal = new Modal({
+      title: 'Are You Sure You Want To Delete?',
+      content: '<div style="text-align:right;">'+
+      '<a onclick="modal.close();return false;" style="color:red">No</a>'+
+      '<a onclick="modal.close();deleteThis();return false;" style="padding-left:15px"> Yes I\'m Sure</a></div>'
+    });
+    function deleteThis(){
+        var request = new XMLHttpRequest();
+        request.open('DELETE', window.location.pathname, true);
+        request.onreadystatechange = function () {
+          if (XMLHttpRequest.DONE === request.readyState
+              && 204 === request.status) {
+              document.getElementById("maincontainer").innerHTML =
+                '<div class="res-wrap">'+
+                '<h1>Delete Success!</h1>'+
+                '<a style="font-size:1.5rem" href="'+
+                request.getResponseHeader('Location')+'">Return to list</a>'+
+                '</div>'
+              ;
+          }
+        }
+        request.send();
+    }
+  </script>
 </body>

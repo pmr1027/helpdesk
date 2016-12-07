@@ -14,8 +14,6 @@ TYPES = ('business', 'event')
 DATASE_FILE = 'data.jsonld'
 CONFIG_FILE = 'app.config.json'
 
-print(dparser.parse('2016-12-10 6:00pm').isoformat())
-
 def file_write(path, tdata):
     with open(path, 'w') as outfile:
         json.dump(tdata, outfile)
@@ -52,48 +50,47 @@ def nonempty_string(x):
     return s
 
 
-# Sideeffects
-# @rel1 array of relations
-# @rel1id string id
-# @reltype string
-# @return None
-#def rectify_relation_difs(rel1,rel1id,reltype,operation):
 
 # pass in a list of differences and a type
 # ensure that all the current ids are with their respective relation
-
-def is_id_in_list(_id, _list):
-    return _id in set(_list)
-
-def is_id_in_set(_id, _set):
-    return _id in _set
-
 def rectify(thisid, old, new, entitytype):
+    if entitytype == 'events':
+        ref_type_1 = Event
+        ref_type_2 = Business
+    else:
+        ref_type_1 = Business
+        ref_type_2 = Event
+
+    rel_from = old
+    print(rel_from)
     new = [] if new == None else new
-    old = [] if old == None else old
+    old = [] if old == None else old.keys()
     new_set = set(new)
     sym_difs = list(set(old).symmetric_difference(new_set))
+    print('\nBeginning',rel_from)
     for dif in sym_difs:
-        item = data[entitytype][dif]
-        if item:
-            if item['relations'] == None:
-                item['relations'] = []
+        rel_to = data[entitytype][dif]
+        if rel_to:
+            print(rel_to['relations'])
+            if rel_to['relations'] == None:
+                rel_to['relations'] = {}
             if dif in new_set:
-                if len(item['relations'])==0:
-                    item['relations'].append(thisid)
+                if len(rel_to['relations'])==0:
+                    rel_from.setdefault(dif,{"@id": api.url_for(ref_type_1, request_id=dif, _external=True)})
+                    rel_to['relations'].setdefault(thisid, {"@id": api.url_for(ref_type_2,request_id=thisid,_external=True)})
                     continue
-                n_set = set(item['relations'])
+                n_set = set(rel_to['relations'])
                 n_set.add(thisid)
-                item['relations'] = list(n_set)
+                rel_from.setdefault(dif,{"@id": api.url_for(ref_type_1, request_id=dif, _external=True)})
+                rel_to['relations'].setdefault(thisid, {"@id": api.url_for(ref_type_2, request_id=thisid, _external=True)})
             else:
-                print(dif,item['relations'])
-                n_set = set(item['relations'])
+                n_set = set(rel_to['relations'])
                 n_set.discard(thisid)
                 if n_set == None:
-                    n_set = []
-                else:
-                    n_set = list(n_set)
-                item['relations'] = n_set
+                    n_set = {}
+                rel_to['relations'].pop(thisid,None)
+                rel_from.pop(dif,None)
+    print('\nEnding',rel_from)
 
 
 
@@ -145,6 +142,10 @@ def parserUpdateArgs(parser, elements, expected):
 # Given the data for a request, generate an HTML representation
 # of that help request.
 def render_request_as_html(entity, types, html):
+    if entity['relations'] == None:
+        relations = []
+    else:
+         relations = entity['relations'].keys()
     if types == TYPES[0]:
         rel = data['events']
     else:
@@ -157,13 +158,10 @@ def render_request_as_html(entity, types, html):
         cities=app_config['addresses']['cities'].keys(),
         states=app_config['addresses']['states'],
         postalcodes=app_config['addresses']['cities']['Chapel Hill'],
-        categories={
-          'len': len(app_config['categories'][types]),
-          'list': app_config['categories'][types]
-        },
+        categories=app_config['categories'][types],
         relations= {
         'rels': rel,
-        'selected': set(entity['relations'])
+        'selected': set(relations)
         },
         #{x:rel[x]['name']} for x in entity['relations']],
         jsonld=json.dumps(entity)
@@ -188,16 +186,13 @@ def render_list_as_html(lists, types, html):
         cities=app_config['addresses']['cities'].keys(),
         states=app_config['addresses']['states'],
         postalcodes=app_config['addresses']['cities']['Chapel Hill'],
-        categories={
-          'len': len(app_config['categories'][types]),
-          'list': app_config['categories'][types]
-        },
+        categories=app_config['categories'][types],
         relations=rel,
         jsonld=json.dumps(jsonldbuild)
         )
 
 new_business_parser = reqparse.RequestParser()
-parserArgs(new_business_parser, ['name','cat','description','streetAddress','postalCode','state','city','openingHours'])
+parserArgs(new_business_parser, ['name','category','description','streetAddress','postalCode','state','city','openingHours'])
 new_business_parser.add_argument('relations', type=str, action='append')
 class BusinessList(Resource):
     # Respond with an HTML representation of the help request list, after
@@ -214,16 +209,14 @@ class BusinessList(Resource):
         reqargs = new_business_parser.parse_args()
         entity = {}
         request_id = generate_id()
-        entity['@context'] = "http://schema.org"
+        # this is wasteful! was using url but didn't seem to work :{
+        entity['@context'] =  app_config['contexts']['business']
         entity['description'] = reqargs['description']
         entity['name'] = reqargs['name']
         entity['openingHours'] = reqargs['openingHours']
         entity['@id'] = 'business/' + request_id
-        entity['cat'] = {
-        "@type": "category",
-        "@value": int(reqargs['cat'])
-        }
-        entity['@type'] = app_config['categories'][TYPES[0]][entity['cat']['@value']].replace(" ", "")
+        entity['category'] = reqargs['category']
+        entity['@type'] = reqargs['category'].replace(" ", "")
         entity['address'] = {
            "@type": "PostalAddress",
            "addressCountry": "United States",
@@ -232,8 +225,8 @@ class BusinessList(Resource):
            "postalCode": reqargs['postalCode'],
            "streetAddress": reqargs['streetAddress']
         }
-        entity['relations'] = reqargs['relations']
-        rectify(request_id, [], reqargs['relations'], 'events')
+        entity['relations'] = {}
+        rectify(request_id, entity['relations'], reqargs['relations'], 'events')
         data['businesses'][request_id] = entity
 
         file_write(DATASE_FILE, data)
@@ -246,7 +239,7 @@ class Business(Resource):
     business_parser = reqparse.RequestParser();
     parserUpdateArgs(business_parser,
     ['name','openingHours','address.addressRegion','address.addressLocality',
-    'address.streetAddress','address.postalCode','description','cat','changed'],
+    'address.streetAddress','address.postalCode','description','category','changed'],
     [str,str,str,str,str,str,str,str,str])
     business_parser.add_argument('relations', type=str, action='append')
 
@@ -275,17 +268,27 @@ class Business(Resource):
                         t = k
                         break
                     request_deeper = request_deeper[k]
-                if key == 'cat':
-                    request_deeper[t]['@value'] = int(update[key])
-                    request['@type'] = app_config['categories'][TYPES[0]][request_deeper[t]['@value']].replace(" ", "")
+                if key == 'category':
+                    request_deeper[t] = update[key]
+                    request['@type'] = update[key].replace(" ", "")
                     continue
                 elif key == 'relations':
+                    print(request_deeper[t])
                     rectify(request_id, request_deeper[t], update[key], 'events')
+                    continue
                 request_deeper[t] = update[key]
 
         file_write(DATASE_FILE, data)
         return make_response(
             render_request_as_html(request, TYPES[0],'business'), 200)
+    def delete(self, request_id):
+        error_if_not_found(request_id,data['businesses'])
+        rectify(request_id, data['businesses'][request_id]['relations'], [], 'events')
+        data['businesses'].pop(request_id, None)
+        file_write(DATASE_FILE, data)
+        res =  make_response('', 204)
+        res.headers.set('Location', api.url_for(BusinessList))
+        return res
 
 # Define a resource for getting a JSON representation of a BusinessList.
 class BusinessListAsJSON(Resource):
@@ -310,7 +313,7 @@ class BusinessAsJSON(Resource):
 
 
 new_event_parser = reqparse.RequestParser()
-parserArgs(new_event_parser, ['name','cat','description','streetAddress',
+parserArgs(new_event_parser, ['name','category','description','streetAddress',
 'postalCode','state','city','startdate.date','startdate.time','enddate.date','enddate.time'])
 class EventList(Resource):
     # Respond with an HTML representation of the help request list, after
@@ -332,17 +335,15 @@ class EventList(Resource):
         entity = {}
         request_id = generate_id()
         # I know they don't have to be listed out this way, but hey
-        entity['@context'] = "http://schema.org"
+        #app.url_for('static', filename='jsonld/context.event.jsonld', _external=True)
+        entity['@context'] = app_config['contexts']['event']
         entity['description'] = reqargs['description']
         entity['name'] = reqargs['name']
         entity['startDate'] = dparser.parse(reqargs['startdate.date']+' '+reqargs['startdate.time']).isoformat()
         entity['endDate'] = dparser.parse(reqargs['enddate.date']+' '+reqargs['enddate.time']).isoformat()
         entity['@id'] = 'events/' + request_id
-        entity['cat'] = {
-        "@type": "category",
-        "@value": int(reqargs['cat'])
-        }
-        entity['@type'] = app_config['categories'][TYPES[1]][entity['cat']['@value']].replace(" ", "")
+        entity['category'] = reqargs['category']
+        entity['@type'] = reqargs['category'].replace(" ", "")
         entity['address'] = {
            "@type": "PostalAddress",
            "addressCountry": "United States",
@@ -351,8 +352,8 @@ class EventList(Resource):
            "postalCode": reqargs['postalCode'],
            "streetAddress": reqargs['streetAddress']
         }
-        entity['relations'] = reqargs['relations']
-        rectify(request_id, [], reqargs['relations'], 'businesses')
+        entity['relations'] = {}
+        rectify(request_id, entity['relations'], reqargs['relations'], 'businesses')
         data['events'][request_id] = entity
 
         file_write(DATASE_FILE, data)
@@ -365,7 +366,7 @@ class Event(Resource):
     event_parser = reqparse.RequestParser();
     parserUpdateArgs(event_parser,
     ['name','time','address.addressRegion','address.addressLocality',
-    'address.streetAddress','address.postalCode','description','cat','changed',
+    'address.streetAddress','address.postalCode','description','category','changed',
     'startDate.date','startDate.time','endDate.date','endDate.time'],
     [str,str,str,str,str,str,str,str,str,str,str,str,str])
     event_parser.add_argument('relations', type=str, action='append')
@@ -400,17 +401,27 @@ class Event(Resource):
                         t = k
                         break
                     request_deeper = request_deeper[k]
-                if key == 'cat':
-                    request_deeper[t]['@value'] = int(update[key])
-                    request['@type'] = app_config['categories'][TYPES[0]][request_deeper[t]['@value']].replace(" ", "")
+                if key == 'category':
+                    request_deeper[t] = update[key]
+                    request['@type'] = update[key].replace(" ", "")
                     continue
                 elif key == 'relations':
                     rectify(request_id, request_deeper[t], update[key], 'businesses')
+                    continue
                 request_deeper[t] = update[key]
 
         file_write(DATASE_FILE, data)
         return make_response(
             render_request_as_html(request, TYPES[1],'event'), 200)
+
+    def delete(self, request_id):
+        error_if_not_found(request_id,data['events'])
+        rectify(request_id, data['events'][request_id]['relations'], [], 'businesses')
+        data['events'].pop(request_id, None)
+        file_write(DATASE_FILE, data)
+        res =  make_response('', 204)
+        res.headers.set('Location', api.url_for(EventList))
+        return res
 
 
 # Define a resource for getting a JSON representation of a EventList.

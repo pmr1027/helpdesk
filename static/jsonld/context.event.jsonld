@@ -3,7 +3,7 @@
         "@vocab": "http://schema.org/",
         "schema": "http://schema.org/",
         "relations": {
-            "@id": "schema:Events",
+            "@id": "schema:organizer",
             "@type": "@id",
             "@container": "@index"
         },

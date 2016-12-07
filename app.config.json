@@ -34,7 +34,7 @@
         "address.streetAddress": 1,
         "address.postalCode": 1,
         "description": 1,
-        "cat": 1,
+        "category": 1,
         "relations": 1,
         "@id": 0
       },
@@ -49,9 +49,29 @@
         "endDate.date": 1,
         "endDate.time": 1,
         "description": 1,
-        "cat": 1,
+        "category": 1,
         "relations": 1,
         "@id": 0
       }
+    },
+    "contexts": {
+        "business": {
+                "@vocab": "http://schema.org/",
+                "schema": "http://schema.org/",
+                "relations": {
+                    "@id": "schema:event",
+                    "@type": "@id",
+                    "@container": "@index"
+                }
+        },
+        "event": {
+                "@vocab": "http://schema.org/",
+                "schema": "http://schema.org/",
+                "relations": {
+                    "@id": "schema:organizer",
+                    "@type": "@id",
+                    "@container": "@index"
+                }
+        }
     }
 }

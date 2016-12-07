@@ -3,6 +3,7 @@
 {% block sitetitle %}All Events{% endblock %}
 
 {% block body %}
+{% if not entity%}<h1 style="text-align:center">No Events Yet!</h1>{%endif%}
 <ul class="evs-ls">
   {% for request_id, req_entity in entity %}
   <li class="ev item"
@@ -13,7 +14,7 @@
       typeof="{{req_entity['@type']}}">
     <header>
       <span class="title" itemprop="name" property="name">{{ req_entity.name }}</span>
-      <span class="cat">{{ categories.list[req_entity.cat['@value']] }}</span>
+      <span class="cat" itemprop="category" property="category">{{ req_entity.category }}</span>
     </header>
     <meta property="openingHours" itemprop="openingHours"content="{{ req_entity.openingHours }}">
     <time class="time" datetime="{{ req_entity.openingHours }}"> {{ req_entity.openingHours}}</time>
@@ -97,9 +98,9 @@
     </label>
   </fieldset>
     <label>Type
-      <select class="cat" name="cat">
-        {% for idx in range(categories.len) %}
-        <option value="{{ idx }}">{{ categories.list[idx] }}</option>
+      <select class="cat" name="category">
+        {% for item in categories %}
+        <option value="{{ item }}">{{ item }}</option>
         {% endfor %}
       </select>
     </label>
