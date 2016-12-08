@@ -1,5 +1,5 @@
 from flask import Flask, render_template, render_template_string, make_response, redirect
-from flask.ext.restful import Api, Resource, reqparse, abort
+from flask_restful import Api, Resource, reqparse, abort
 
 import json
 import string
@@ -492,5 +492,5 @@ def format_getTime(value):
 app.jinja_env.filters['getTime'] = format_getTime
 
 # Start the server.
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8888, debug=True)
+#if __name__ == '__main__':
+    #app.run(host='0.0.0.0', port=8888, debug=True)
