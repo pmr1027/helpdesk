@@ -3,3 +3,4 @@ flask-restful
 rdflib
 rdflib-jsonld
 html5lib
+gunicorn==19.3.0
