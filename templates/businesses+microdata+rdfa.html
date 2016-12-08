@@ -1,7 +1,13 @@
 {% extends "index.html"%}
 
 {% block sitetitle %}All Businesses{% endblock %}
-
+{%block titlebar%}
+<div class="gb-title-bar" style="background-color:#253540;padding: 0 .5rem;">
+  <div class="container">
+     <h3 class="gb-title-bar-label" style="color:#fff;padding: 0 11px;">Businesses List</h3>
+  </div>
+</div>
+{% endblock %}
 {% block body %}
 {% if not entity%}<h1 style="text-align:center">No Businesses Yet!</h1>{%endif%}
 <ul class="bss-ls">

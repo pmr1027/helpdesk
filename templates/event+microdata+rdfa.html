@@ -1,6 +1,6 @@
 {% extends "index.html"%}
 
-{% block sitetitle %}{{entity.name}}-{{entity.address.streetAddress}}{% endblock %}
+{% block sitetitle %}{{entity.name}}-{{entity.location.streetAddress}}{% endblock %}
 
 {% block body %}
 <section class="ev-wrapper">
@@ -14,15 +14,17 @@
       <span class="title" itemprop="name" property="name">{{ entity.name }}</span>
       <span class="cat" itemprop="category" property="category">{{ entity.category }}</span>
     </header>
-    <meta property="openingHours" itemprop="openingHours"content="{{ entity.openingHours }}">
-    <time class="time" datetime="{{ entity.openingHours }}"> {{ entity.openingHours}}</time>
+    <div class="time" >
+      <time itemprop="startDate" property="startDate" datetime="{{ entity.startDate }}"> {{ entity.startDate | datetime}}</time>
+      -<time itemprop="endDate" property="endDate" datetime="{{ entity.endDate }}"> {{ entity.endDate | datetime}}</time>
+    </div>
     <div class="location" itemprop="location" itemscope itemtype="http://schema.org/Place" property="location" typeof="Place">
       <span itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress" property="address" typeof="PostalAddress">
-        <span class="street" itemprop="streetAddress" property="streetAddress">{{entity.address.streetAddress}} </span>
-        <span class="city" itemprop="addressLocality" property="addressLocality">{{entity.address.addressLocality}}, </span>
-        <span class="state" itemprop="addressRegion" property="addressRegion">{{entity.address.addressRegion}}</span>
-        <meta itemprop="postalCode" property="postalCode" content="{{entity.address.postalCode}}">
-        <meta itemprop="addressCountry" property="addressCountry" content="{{entity.address.addressCountry}}">
+        <span class="street" itemprop="streetAddress" property="streetAddress">{{entity.location.streetAddress}} </span>
+        <span class="city" itemprop="addressLocality" property="addressLocality">{{entity.location.addressLocality}}, </span>
+        <span class="state" itemprop="addressRegion" property="addressRegion">{{entity.location.addressRegion}}</span>
+        <meta itemprop="postalCode" property="postalCode" content="{{entity.location.postalCode}}">
+        <meta itemprop="addressCountry" property="addressCountry" content="{{entity.location.addressCountry}}">
       </span>
     </div>
     <div class="desc" itemprop="description" property="description">{{entity['description']}}</div>
@@ -85,26 +87,26 @@
     <fieldset>
     <legend>Where is it?</legend>
     <label>Street Address
-      <input class="address" type="text" name="address.streetAddress" value="{{entity.address.streetAddress}}"/>
+      <input class="address" type="text" name="location.streetAddress" value="{{entity.location.streetAddress}}"/>
     </label>
     <label>City
-      <select class="address" name="address.addressLocality">
+      <select class="address" name="location.addressLocality">
         {% for item in cities %}
-        <option value="{{ item }}"  {% if item == entity.address.addressLocality %}selected{%endif%}>{{ item }}</option>
+        <option value="{{ item }}"  {% if item == entity.location.addressLocality %}selected{%endif%}>{{ item }}</option>
         {% endfor %}
       </select>
     </label>
     <label>Postal Code
-      <select class="address" name="address.postalCode">
+      <select class="address" name="location.postalCode">
         {% for item in postalcodes %}
-        <option value="{{ item }}"  {% if item == entity.address.postalCode %}selected{%endif%}>{{ item }}</option>
+        <option value="{{ item }}"  {% if item == entity.location.postalCode %}selected{%endif%}>{{ item }}</option>
         {% endfor %}
       </select>
     </label>
     <label>State
-      <select class="address" name="address.addressRegion">
+      <select class="address" name="location.addressRegion">
         {% for item in states %}
-        <option value="{{ item }}" {% if item == entity.address.addressRegion %}selected{%endif%}>{{ item }}</option>
+        <option value="{{ item }}" {% if item == entity.location.addressRegion %}selected{%endif%}>{{ item }}</option>
         {% endfor %}
       </select>
     </label>

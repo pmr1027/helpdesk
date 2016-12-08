@@ -1,7 +1,13 @@
 {% extends "index.html"%}
 
 {% block sitetitle %}All Events{% endblock %}
-
+{%block titlebar%}
+<div class="gb-title-bar" style="background-color:#253540;padding: 0 .5rem;">
+  <div class="container">
+     <h3 class="gb-title-bar-label" style="color:#fff;padding: 0 11px;">Events List</h3>
+  </div>
+</div>
+{% endblock %}
 {% block body %}
 {% if not entity%}<h1 style="text-align:center">No Events Yet!</h1>{%endif%}
 <ul class="evs-ls">
@@ -14,22 +20,26 @@
       typeof="{{req_entity['@type']}}">
     <header>
       <span class="title" itemprop="name" property="name">{{ req_entity.name }}</span>
-      <span class="cat" itemprop="category" property="category">{{ req_entity.category }}</span>
+      <span class="cat">{{ req_entity.category }}</span>
     </header>
-    <meta property="openingHours" itemprop="openingHours"content="{{ req_entity.openingHours }}">
-    <time class="time" datetime="{{ req_entity.openingHours }}"> {{ req_entity.openingHours}}</time>
-    <div class="location" itemprop="location" itemscope itemtype="http://schema.org/Place" property="location" typeof="Place">
-      <span itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress" property="address" typeof="PostalAddress">
-        <span class="street" itemprop="streetAddress" property="streetAddress">{{req_entity.address.streetAddress}} </span>
-        <span class="city" itemprop="addressLocality" property="addressLocality">{{req_entity.address.addressLocality}}, </span>
-        <span class="state" itemprop="addressRegion" property="addressRegion">{{req_entity.address.addressRegion}}</span>
-        <meta itemprop="postalCode" property="postalCode" content="{{req_entity.address.postalCode}}">
-        <meta itemprop="addressCountry" property="addressCountry" content="{{req_entity.address.addressCountry}}">
+    <div class="time" >
+      <time itemprop="startDate" property="startDate" datetime="{{ req_entity.startDate }}"> {{ req_entity.startDate | datetime}}</time>
+      -<time itemprop="endDate" property="endDate" datetime="{{ req_entity.endDate }}"> {{ req_entity.endDate | datetime}}</time>
+    </div>
+    <div class="location">
+      <span itemprop="location" itemscope="" itemtype="http://schema.org/PostalAddress" property="location" typeof="PostalAddress">
+        <meta itemprop="name" property="name" content="{{ req_entity.name }}">
+        <span class="street" itemprop="streetAddress" property="streetAddress">{{req_entity.location.streetAddress}} </span>
+        <span class="city" itemprop="addressLocality" property="addressLocality">{{req_entity.location.addressLocality}}, </span>
+        <span class="state" itemprop="addressRegion" property="addressRegion">{{req_entity.location.addressRegion}}</span>
+        <meta itemprop="postalCode" property="postalCode" content="{{req_entity.location.postalCode}}">
+        <meta itemprop="addressCountry" property="addressCountry" content="{{req_entity.location.addressCountry}}">
       </span>
     </div>
     <div class="desc" itemprop="description" property="description">{{req_entity['description']}}</div>
     <div class="view">
-      <a rel="details" class="url" itemprop="url" property="url" href="{{ url_for('event', request_id=request_id) }}">View Details</a>
+      <meta itemprop="url" property="url" content="{{ url_for('event', request_id=request_id,  _external=True) }}">
+      <a rel="details" href="{{ url_for('event', request_id=request_id,  _external=True) }}">View Details</a>
     </div>
   </li>
   {% endfor %}

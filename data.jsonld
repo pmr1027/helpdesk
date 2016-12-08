@@ -1,1 +1,14 @@
-{"events": {"g69g6r": {"startDate": "2017-01-01T01:00:00", "@id": "events/g69g6r", "address": {"streetAddress": "140 W Franklin St", "postalCode": "27514", "addressLocality": "Chapel Hill", "addressCountry": "United States", "@type": "PostalAddress", "addressRegion": "NC"}, "@context": {"schema": "http://schema.org/", "@vocab": "http://schema.org/", "relations": {"@id": "schema:organizer", "@type": "@id", "@container": "@index"}}, "endDate": "2017-02-01T01:00:00", "description": "Test event 0", "category": "Education Event", "@type": "EducationEvent", "name": "Test Event 0", "relations": {"ju488o": {"@id": "http://0.0.0.0:8888/business/ju488o"}}}}, "businesses": {"zkuxv7": {"openingHours": "Mon-Fri: 7:00am - 9:00pm", "@id": "business/zkuxv7", "@context": {"schema": "http://schema.org/", "@vocab": "http://schema.org/", "relations": {"@id": "schema:event", "@type": "@id", "@container": "@index"}}, "address": {"streetAddress": "123 Rescue St", "postalCode": "27514", "addressLocality": "Chapel Hill", "addressCountry": "United States", "@type": "PostalAddress", "addressRegion": "NC"}, "description": "Adopt today.", "category": "Animal Shelter", "@type": "AnimalShelter", "name": "APC of Chapel Hill", "relations": {}}, "ju488o": {"openingHours": "Mon-Sun: 24hr", "address": {"streetAddress": "110 Hospital St", "postalCode": "27514", "addressCountry": "United States", "addressLocality": "Chapel Hill", "@type": "PostalAddress", "addressRegion": "NC"}, "@id": "business/ju488o", "@context": {"schema": "http://schema.org/", "@vocab": "http://schema.org/", "relations": {"@id": "schema:event", "@type": "@id", "@container": "@index"}}, "description": "A test business", "category": "Emergency Service", "@type": "EmergencyService", "name": "An Emergency Service", "relations": {"g69g6r": {"@id": "http://0.0.0.0:8888/event/g69g6r"}}}}, "@context": {"events": {"@id": "http://schema.org/event", "@container": "@index"}, "businesses": {"@id": "http://schema.org/LocalBusiness", "@container": "@index"}}}
+{
+    "events": {},
+    "@context": {
+        "events": {
+            "@id": "http://schema.org/event",
+            "@container": "@index"
+        },
+        "businesses": {
+            "@id": "http://schema.org/organization",
+            "@container": "@index"
+        }
+    },
+    "businesses": {}
+}

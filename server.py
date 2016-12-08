@@ -344,7 +344,7 @@ class EventList(Resource):
         entity['@id'] = 'events/' + request_id
         entity['category'] = reqargs['category']
         entity['@type'] = reqargs['category'].replace(" ", "")
-        entity['address'] = {
+        entity['location'] = {
            "@type": "PostalAddress",
            "addressCountry": "United States",
            "addressLocality": reqargs['city'],
@@ -365,8 +365,8 @@ class EventList(Resource):
 class Event(Resource):
     event_parser = reqparse.RequestParser();
     parserUpdateArgs(event_parser,
-    ['name','time','address.addressRegion','address.addressLocality',
-    'address.streetAddress','address.postalCode','description','category','changed',
+    ['name','time','location.addressRegion','location.addressLocality',
+    'location.streetAddress','location.postalCode','description','category','changed',
     'startDate.date','startDate.time','endDate.date','endDate.time'],
     [str,str,str,str,str,str,str,str,str,str,str,str,str])
     event_parser.add_argument('relations', type=str, action='append')
@@ -493,4 +493,4 @@ app.jinja_env.filters['getTime'] = format_getTime
 
 # Start the server.
 #if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=8888, debug=True)
+#    app.run(host='0.0.0.0', port=8888, debug=True)
