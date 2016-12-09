@@ -44,13 +44,42 @@ To run it:
    ```
    Alternatively, you can access the service running here: http://aeshin.org:5556/contacts.json
 
+---
+# Run on GCP
+1. App Engine Files
+   * appengine_config.py
+   * app.yaml
+   * vendor.py
+
+2. Create App Engine Project
+   [App Engine](https://appengine.google.com/)
+
+3. Clone repository
+   ```
+   $ git clone <repository url>
+   ```
+
+4. Install required dependencies into lib:
+   ```
+   $ cd <project folder>
+   $ pip install -r requirements.txt -t ./lib
+   ```
+
+4. Test configuration and preview in browser:
+   ```
+   $ dev_appserver.py ./app.yaml
+   ```
+
+5. Deploy App:
+   ```
+   $ gcloud app deploy app.yaml --project <project name>
+   ```
 
 ---
 
 #Part 2
 
 <!-- business -->
-<style>dd{margin-bottom: 8px}</style>
 ##Business(es)
 <dl>
   <dt><code>bs</code></dt>
