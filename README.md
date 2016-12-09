@@ -47,4 +47,90 @@ To run it:
 
 ---
 
-##Part 2
+#Part 2
+
+<!-- business -->
+<style>dd{margin-bottom: 8px}</style>
+##Business(es)
+<dl>
+  <dt><code>bs</code></dt>
+  <dd>May appear to indicate a business.</dd>
+  <dt><code>title</code></dt>
+  <dd>May appear within <code>bs</code>. Indicates the business's title</dd>
+  <dt><code>cat</code></dt>
+  <dd>May appear within <code>bs</code>. Indicates the business's type (category)</dd>
+  <dt><code>time</code></dt>
+  <dd>May appear within <code>bs</code>. Indicates the business's hours of operation (times of operation)</dd>
+  <dt><code>location</code></dt>
+  <dd>May appear within <code>bs</code>. Indicates the business's location.</dd>
+  <dt><code>address</code></dt>
+  <dd>May appear within <code>location</code>. Indicates the business's location address.</dd>
+  <dt><code>street</code></dt>
+  <dd>May appear within <code>address</code>. Indicates the business's location address street.</dd>
+  <dt><code>city</code></dt>
+  <dd>May appear within <code>address</code>. Indicates the business's location address city.</dd>
+  <dt><code>state</code></dt>
+  <dd>May appear within <code>address</code>. Indicates the business's location address state.</dd>
+  <dt><code>view</code></dt>
+  <dd>May appear within <code>bs</code>. Indicates the business's alternate views.</dd>
+  <dt><code>url</code></dt>
+  <dd>May appear within <code>view</code>. Indicates the business's related url.</dd>
+  <dt><code>details</code></dt>
+  <dd>May appear on a <code>url</code> within <code>view</code> as a <code>rel</code>
+    attribute. Indicates the business's details url.</dd>
+  <dt><code>bss-ls-url</code></dt>
+  <dd>May appear within <code>view</code>. Indicates a businesses list (collection) URL.</dd>
+  <dt><code>collection</code></dt>
+  <dd>May appear on a <code>bss-ls-url</code> within <code>view</code> as a <code>rel</code>
+    attribute. Indicates a listing (collection) of businesses.</dd>
+  <dt><code>update</code></dt>
+  <dd>May appear on a form submission control. Sends update information to the server.</dd>
+  <dt><code>bss</code></dt>
+  <dd>May appear to indicate a list (collection) of businesses.</dd>
+  <dt><code>add</code></dt>
+  <dd>May appear on a form submission control within <code>bss</code>. Adds a business to the list (collection).</dd>
+</dl>
+<!-- /business -->
+---
+<!-- event -->
+##Event(s)
+<dl>
+  <dl>
+    <dt><code>ev</code></dt>
+    <dd>May appear to indicate a event.</dd>
+    <dt><code>title</code></dt>
+    <dd>May appear within <code>ev</code>. Indicates the event's title</dd>
+    <dt><code>cat</code></dt>
+    <dd>May appear within <code>ev</code>. Indicates the event's type (category)</dd>
+    <dt><code>time</code></dt>
+    <dd>May appear within <code>ev</code>. Indicates the event's hours of operation (times of operation)</dd>
+    <dt><code>location</code></dt>
+    <dd>May appear within <code>ev</code>. Indicates the event's location.</dd>
+    <dt><code>address</code></dt>
+    <dd>May appear within <code>location</code>. Indicates the event's location address.</dd>
+    <dt><code>street</code></dt>
+    <dd>May appear within <code>address</code>. Indicates the event's location address street.</dd>
+    <dt><code>city</code></dt>
+    <dd>May appear within <code>address</code>. Indicates the event's location address city.</dd>
+    <dt><code>state</code></dt>
+    <dd>May appear within <code>address</code>. Indicates the event's location address state.</dd>
+    <dt><code>view</code></dt>
+    <dd>May appear within <code>ev</code>. Indicates the event's alternate views.</dd>
+    <dt><code>url</code></dt>
+    <dd>May appear within <code>view</code>. Indicates the event's related url.</dd>
+    <dt><code>details</code></dt>
+    <dd>May appear on a <code>url</code> within <code>view</code> as a <code>rel</code>
+      attribute. Indicates the event's details url.</dd>
+    <dt><code>evs-ls-url</code></dt>
+    <dd>May appear within <code>view</code>. Indicates a events list (collection) URL.</dd>
+    <dt><code>collection</code></dt>
+    <dd>May appear on a <code>evs-ls-url</code> within <code>view</code> as a <code>rel</code>
+      attribute. Indicates a listing (collection) of events.</dd>
+    <dt><code>update</code></dt>
+    <dd>May appear on a form submission control. Sends update information to the server.</dd>
+    <dt><code>evs</code></dt>
+    <dd>May appear to indicate a list (collection) of events.</dd>
+    <dt><code>add</code></dt>
+    <dd>May appear on a form submission control within <code>evs</code>. Adds an event to the list (collection).</dd>
+  </dl>
+</dl>
