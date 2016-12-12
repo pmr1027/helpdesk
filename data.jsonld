@@ -1,14 +1,1 @@
-{
-    "events": {},
-    "@context": {
-        "events": {
-            "@id": "http://schema.org/event",
-            "@container": "@index"
-        },
-        "businesses": {
-            "@id": "http://schema.org/organization",
-            "@container": "@index"
-        }
-    },
-    "businesses": {}
-}
+{"events": {"odz7de": {"relations": {"14vl8j": {"@id": "http://0.0.0.0:8888/business/14vl8j"}}, "startDate": "2016-12-01T13:00:00", "@type": "BusinessEvent", "description": "sfkasljf;ajwe", "category": "Business Event", "@id": "events/odz7de", "endDate": "2017-01-01T01:00:00", "name": "sdfas", "@context": {"relations": {"@container": "@index", "@type": "@id", "@id": "schema:organizer"}, "schema": "http://schema.org/", "@vocab": "http://schema.org/"}, "location": {"@type": "PostalAddress", "addressLocality": "Chapel Hill", "streetAddress": "dsjbsjlkfahkdsja", "addressCountry": "United States", "addressRegion": "NC", "postalCode": "27514"}}}, "@context": {"events": {"@container": "@index", "@id": "http://schema.org/event"}, "businesses": {"@container": "@index", "@id": "http://schema.org/organization"}}, "businesses": {"14vl8j": {"@type": "AnimalShelter", "description": "fsak;lfjdkjwekl;f", "category": "Animal Shelter", "openingHours": "c;dsfjknjlk", "name": "dsajflk;dfjk;sa", "address": {"@type": "PostalAddress", "addressLocality": "Chapel Hill", "streetAddress": "bsfdknldaflkjsad", "addressCountry": "United States", "addressRegion": "NC", "postalCode": "27514"}, "@id": "business/14vl8j", "@context": {"relations": {"@container": "@index", "@type": "@id", "@id": "schema:event"}, "schema": "http://schema.org/", "@vocab": "http://schema.org/"}, "relations": {"odz7de": {"@id": "http://0.0.0.0:8888/event/odz7de"}}}, "njkpst": {"@type": "AnimalShelter", "description": "dsafklhjewbq", "category": "Animal Shelter", "openingHours": "jhlkdsakjfh", "name": "kljds;fa", "address": {"@type": "PostalAddress", "addressLocality": "Chapel Hill", "streetAddress": "jhdflkafhsj", "addressCountry": "United States", "addressRegion": "NC", "postalCode": "27514"}, "@id": "business/njkpst", "@context": {"relations": {"@container": "@index", "@type": "@id", "@id": "schema:event"}, "schema": "http://schema.org/", "@vocab": "http://schema.org/"}, "relations": {}}}}
