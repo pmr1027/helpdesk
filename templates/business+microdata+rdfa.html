@@ -100,18 +100,19 @@
       </select>
     </label>
     <label>Related To
-      <select class="relations" name="relations" multiple>
+      <select id="slt-rel" class="relations" name="relations" multiple>
         {% for id in relations.rels %}
         <option value="{{ id }}" {% if id in relations.selected %}selected{% endif %}>{{ relations.rels[id].name }}</option>
         {% endfor %}
       </select>
+      <a class="btn btn-primary btn-var-width btn-small" onclick="clearSelect('slt-rel')">Clear Relations</a><br>
     </label>
     <label>Description
       <textarea class="desc" name="description" rows="8" cols="40">{{entity.description}}</textarea>
     </label>
-    <input class="update" type="submit" value="Update Business">
+    <input class="btn btn-go update" type="submit" value="Update Business">
   </form>
-  <a class="delete btn" style="color:red" onclick="modal.open()">Delete this Business</a>
+  <a class="delete btn btn-warn btn-var-width" onclick="modal.open()">Delete Business</a><br>
 </div>
 </div>
 </div>

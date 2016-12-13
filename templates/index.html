@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <style>
   main{padding-bottom: 2rem}
+  .warn {color:red;font-size: .7em;}
   </style>
   <title>{% block sitetitle %}{% endblock %}</title>
 </head>
@@ -30,6 +31,9 @@
       '<a onclick="modal.close();return false;" style="color:red">No</a>'+
       '<a onclick="modal.close();deleteThis();return false;" style="padding-left:15px"> Yes I\'m Sure</a></div>'
     });
+    var errorModal = new Modal({
+      title: 'Error Message'
+    });
     function deleteThis(){
         var request = new XMLHttpRequest();
         request.open('DELETE', window.location.pathname, true);
@@ -46,6 +50,28 @@
           }
         }
         request.send();
+    }
+    function check(el, message) {
+      var re = new RegExp(el.getAttribute('data-regex'));
+      var sb = document.getElementById(el.getAttribute('data-submit'));
+      var wn = el.parentNode.querySelector('.warn');
+
+      if (!re.test(el.value)) {
+        el.style.color = 'red';
+        sb.setAttribute('disabled','true');
+        if (typeof wn != 'undefined') wn.textContent = message;
+      } else {
+        el.style.color = '';
+        sb.removeAttribute('disabled');
+        if (typeof wn != 'undefined') wn.textContent = '';
+      }
+    }
+    function clearSelect(id) {
+      id = document.getElementById(id);
+      var c = [].slice.call(id.querySelectorAll('option'));
+      var i=0,l=c.length;
+      for (i;i<l;i++) c[i].removeAttribute('selected');
+      id.dispatchEvent(new Event('change'));
     }
   </script>
 </body>

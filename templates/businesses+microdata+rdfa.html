@@ -95,7 +95,6 @@
     </label>
     <label>Related To
       <select class="relations" name="relations" multiple>
-        <option>Please Select If Applicable</option>
         {% for id in relations %}
         <option value="{{ id }}">{{ relations[id].name }}</option>
         {% endfor %}

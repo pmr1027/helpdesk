@@ -1,8 +1,46 @@
 .btn
   background-color: transparent
-  border: none
+  border: 1px solid transparent
   border-radius: 2px
+  cursor: pointer
   display: block
+  font-size: 1em
+  margin: .5em
   padding: 8px 16px
   position: relative
+  text-align: center
   text-decoration: none
+  transition: all 0.3s ease 0s
+
+  &-var-width
+    display: inline-block
+
+  &-small
+    font-size: .7em
+
+  &-primary
+    background-color: $font__color-acc
+    border-color: $font__color-acc
+    color: #fff
+    &:hover,&:focus
+      background-color: darken($font__color-acc, 10%)
+      border-color: darken($font__color-acc, 10%)
+      color: #fff
+
+  &-warn
+    background-color: $font__color-warn
+    border-color: $font__color-warn
+    color: #fff
+    &:hover,&:focus
+      background-color: darken($font__color-warn, 10%)
+      border-color: darken($font__color-warn, 10%)
+      color: #fff
+
+  &-go
+    background-color: $font__color-go
+    border-color: $font__color-go
+    color: #fff
+    &:hover,&:focus
+      background-color: darken($font__color-go, 10%)
+      border-color: darken($font__color-go, 10%)
+      color: #fff

@@ -50,6 +50,15 @@ def nonempty_string(x):
     return s
 
 
+# parse date funciton raise error if invalid
+# @return isoformat date
+def parse_date(x):
+    try:
+        return dparser.parse(x).isoformat()
+    except:
+        message = "Invalid Date Format: {}".format(x)
+        abort(400, message=message)
+
 
 # pass in a list of differences and a type
 # ensure that all the current ids are with their respective relation
@@ -339,8 +348,8 @@ class EventList(Resource):
         entity['@context'] = app_config['contexts']['event']
         entity['description'] = reqargs['description']
         entity['name'] = reqargs['name']
-        entity['startDate'] = dparser.parse(reqargs['startdate.date']+' '+reqargs['startdate.time']).isoformat()
-        entity['endDate'] = dparser.parse(reqargs['enddate.date']+' '+reqargs['enddate.time']).isoformat()
+        entity['startDate'] = parse_date(reqargs['startdate.date']+' '+reqargs['startdate.time'])
+        entity['endDate'] = parse_date(reqargs['enddate.date']+' '+reqargs['enddate.time'])
         entity['@id'] = 'events/' + request_id
         entity['category'] = reqargs['category']
         entity['@type'] = reqargs['category'].replace(" ", "")
@@ -393,8 +402,8 @@ class Event(Resource):
                 t = key
                 if 'startDate' in key or 'endDate' in key:
                     # not the most efficient way, but it seems to work
-                    request[traverse[0]] = dparser.parse(update[traverse[0]+'.date']
-                    +' '+update[traverse[0]+'.time']).isoformat()
+                    request[traverse[0]] = parse_date(update[traverse[0]+'.date']
+                    +' '+update[traverse[0]+'.time'])
                     continue
                 for k in traverse:
                     if k == traverse[-1]:
@@ -485,6 +494,11 @@ app.jinja_env.filters['datetime'] = format_datetime
 def format_getDate(value):
     return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
 app.jinja_env.filters['getDate'] = format_getDate
+
+@app.template_filter('getDatemmddyyyy')
+def format_getDatemmddyyyy(value):
+    return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S").strftime('%m-%d-%Y')
+app.jinja_env.filters['getDatemmddyyyy'] = format_getDatemmddyyyy
 
 @app.template_filter('getTime')
 def format_getTime(value):

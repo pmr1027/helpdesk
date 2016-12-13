@@ -69,19 +69,35 @@
     <fieldset>
     <legend>When does it begin?</legend>
     <label>Date
-      <input class="time" type="date" name="startDate.date" value="{{entity.startDate|getDate}}"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Date')"
+      data-regex="^(0?\d|1[0-2])[-/](0?[1-2]?\d?|3[0-1])[-/]\d{4}\s{0,}$"
+      data-submit="submission" placeholder="mm/dd/yyyy"
+      class="time" type="text" name="startDate.date" value="{{entity.startDate|getDatemmddyyyy}}"/>
     </label>
     <label>Time
-      <input class="time" type="time" name="startDate.time" value="{{entity.endDate|getTime}}"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Time')"
+      data-regex="^(0?\d|1[0-2]|(((1\d)|(2[0-4]))(?!:[0-5]\d\s{0,}[ap]m))):[0-5]\d\s{0,}([ap]m)?$"
+      data-submit="submission" placeholder="1:00pm or 13:00"
+      class="time" type="time" name="startDate.time" value="{{entity.endDate|getTime}}"/>
     </label>
     </fieldset>
     <fieldset>
     <legend>When does it end?</legend>
     <label>Date
-      <input class="time" type="date" name="endDate.date" value="{{entity.endDate|getDate}}"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Date')"
+      data-regex="^(0?\d|1[0-2])[-/](0?[1-2]?\d?|3[0-1])[-/]\d{4}\s{0,}$"
+      data-submit="submission" placeholder="mm/dd/yyyy"
+      class="time" type="text" name="endDate.date" value="{{entity.endDate|getDatemmddyyyy}}"/>
     </label>
     <label>Time
-      <input class="time" type="time" name="endDate.time" value="{{entity.endDate|getTime}}"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Time')"
+      data-regex="^(0?\d|1[0-2]|(((1\d)|(2[0-4]))(?!:[0-5]\d\s{0,}[ap]m))):[0-5]\d\s{0,}([ap]m)?$"
+      data-submit="submission" placeholder="1:00pm or 13:00"
+      class="time" type="time" name="endDate.time" value="{{entity.endDate|getTime}}"/>
     </label>
     </fieldset>
     <fieldset>
@@ -119,18 +135,19 @@
       </select>
     </label>
     <label>Related To
-      <select class="relations" name="relations" multiple>
+      <select id="slt-rel" class="relations" name="relations" multiple>
         {% for id in relations.rels %}
         <option value="{{ id }}" {% if id in relations.selected %}selected{% endif %}>{{ relations.rels[id].name }}</option>
         {% endfor %}
       </select>
+      <a class="btn btn-primary btn-var-width btn-small" onclick="clearSelect('slt-rel')">Clear Relations</a><br>
     </label>
     <label>Description
       <textarea class="desc" name="description" rows="8" cols="40">{{entity.description}}</textarea>
     </label>
-    <input class="update" type="submit" value="Update Event">
+    <input id="submission" class="btn btn-go update" type="submit" value="Update Event">
   </form>
-  <a class="delete btn" style="color:red" onclick="modal.open()">Delete this Event</a>
+  <a class="delete btn btn-warn btn-var-width" onclick="modal.open()">Delete this Event</a>
 </div>
 </div>
 </div>
@@ -150,10 +167,19 @@
     var request = new XMLHttpRequest();
     request.open('PATCH', window.location.pathname);
     request.onreadystatechange = function () {
-      if (XMLHttpRequest.DONE === request.readyState
-          && 200 === request.status) {
-        window.location.reload(true);
-      }
+      if (XMLHttpRequest.DONE === request.readyState) {
+        if (200 === request.status){
+          window.location.reload(true);
+        } else {
+          if (request.getResponseHeader('content-type') == 'application/json') {
+            var js = JSON.parse(request.responseText);
+            errorModal.content(js.message);
+            } else {
+              errorModal.content('An error has occured.');
+            }
+            errorModal.open();
+          }
+        }
     }
     var tosend = new FormData(form);
     tosend.append('changed', Object.keys(changed).join(','));

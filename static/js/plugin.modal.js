@@ -25,6 +25,8 @@ var window = this;
     // Create options by extending defaults with the passed in arugments
     if (arguments[0] && typeof arguments[0] === "object") {
       this.options = extendDefaults(defaults, arguments[0]);
+    } else {
+      this.options = defaults;
     }
 
     if (this.options.autoOpen === true) this.open();
@@ -44,7 +46,7 @@ var window = this;
       if (_.overlay.parentNode) _.overlay.parentNode.removeChild(_.overlay);
     });
   };
-    
+
   this.Modal.prototype.open = function() {
     buildOut.call(this);
     initializeEvents.call(this);
@@ -58,11 +60,11 @@ var window = this;
   this.Modal.prototype.content = function(html) {
       this.options.content = html;
   };
-  
+
   this.Modal.prototype.title = function(text) {
       this.options.title = text;
   };
-    
+
   function buildOut() {
     // References
     var content;
@@ -96,17 +98,17 @@ var window = this;
       this.overlay.className = "modal-overlay " + this.options.className;
       docFrag.appendChild(this.overlay);
     }
-    
+
     // Creater inner wrapper
     this.innerWrapper = document.createElement("section");
     this.innerWrapper.className = "modal-inner";
-  
+
     // Create header area and append to modal
     this.header = document.createElement("header");
     this.header.className = 'modal-header';
     this.header.innerHTML = this.options.title;
     this.innerWrapper.appendChild(this.header);
-      
+
      // If closeButton option is true, add a close button
     if (this.options.closeButton === true) {
       this.closeButton = document.createElement("button");
@@ -122,7 +124,7 @@ var window = this;
     console.log(this.options.content);
     //contentHolder.style.maxHeight = window.innerHeight;
     this.innerWrapper.appendChild(contentHolder);
-      
+
     this.modal.appendChild(this.innerWrapper);
     // Append modal to DocumentFragment
     docFrag.appendChild(this.modal);
@@ -158,5 +160,3 @@ var window = this;
     return 'transitionend';
   }
 })();
-
-

@@ -65,19 +65,35 @@
     <fieldset>
     <legend>When does it begin?</legend>
     <label>Date
-      <input class="time" type="date" name="startdate.date"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Date')"
+      data-regex="^(0?\d|1[0-2])[-/](0?[1-2]?\d?|3[0-1])[-/]\d{4}\s{0,}$"
+      data-submit="submission" placeholder="mm/dd/yyyy"
+      class="time" type="text" name="startdate.date"/>
     </label>
     <label>Time
-      <input class="time" type="time" name="startdate.time"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Time')"
+      data-regex="^(0?\d|1[0-2]|(((1\d)|(2[0-4]))(?!:[0-5]\d\s{0,}[ap]m))):[0-5]\d\s{0,}([ap]m)?$"
+      data-submit="submission" placeholder="1:00pm or 13:00"
+      class="time" type="time" name="startdate.time"/>
     </label>
     </fieldset>
     <fieldset>
     <legend>When does it end?</legend>
     <label>Date
-      <input class="time" type="date" name="enddate.date"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Date')"
+      data-regex="^(0?\d|1[0-2])[-/](0?[1-2]?\d?|3[0-1])[-/]\d{4}\s{0,}$"
+      data-submit="submission" placeholder="mm/dd/yyyy"
+      class="time" type="text" name="enddate.date"/>
     </label>
     <label>Time
-      <input class="time" type="time" name="enddate.time"/>
+      <span class="warn"></span>
+      <input onkeyup="check(this, 'Invalid Time')"
+      data-regex="^(0?\d|1[0-2]|(((1\d)|(2[0-4]))(?!:[0-5]\d\s{0,}[ap]m))):[0-5]\d\s{0,}([ap]m)?$"
+      data-submit="submission" placeholder="1:00pm or 13:00"
+      class="time" type="time" name="enddate.time"/>
     </label>
     </fieldset>
     <fieldset>
@@ -124,7 +140,7 @@
     <label>Description
       <textarea class="desc" name="description" rows="8" cols="40"></textarea>
     </label>
-    <input class="add" type="submit" value="Add Event">
+    <input id="submission" class="add" type="submit" value="Add Event">
   </form>
 </div>
 </div>
